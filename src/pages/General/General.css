@@ -1,0 +1,107 @@
+/* General container */
+.general-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f4f6f8;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Header */
+  .general-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  
+  /* Logout Button */
+  .general-logout-btn {
+    display: flex;
+    align-items: center;
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+  }
+  
+  .general-logout-btn:hover {
+    background-color: #b71c1c;
+  }
+  
+  .general-logout-btn svg {
+    margin-right: 5px;
+  }
+  
+  /* Side Menu */
+  .general-side-menu {
+    width: 250px;
+    padding-top: 10px;
+    background-color: #fff;
+    height: 100%;
+  }
+  
+  .general-side-menu .MuiListItem-root {
+    transition: background 0.3s ease;
+  }
+  
+  .general-side-menu .MuiListItem-root:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Side Menu Icons */
+  .general-menu-icon {
+    color: #1976d2;
+    margin-right: 10px;
+  }
+  
+  /* general Content */
+  .general-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    padding: 80px 20px 20px;
+  }
+  
+  /* general Card */
+  .general-card {
+    width: 100%;
+    max-width: 800px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Action Buttons */
+  .MuiGrid-container {
+    margin-bottom: 20px;
+  }
+  
+  /* Table */
+  .MuiTableContainer-root {
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Footer */
+  .footer {
+    background-color: #fff;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.1);
+    margin-top: auto;
+  }
+  
