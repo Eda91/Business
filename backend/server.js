@@ -1,15 +1,15 @@
-// Load environment variables from .env file
-require('dotenv').config();
-
-console.log(process.env.JWT_SECRET);  // Logs your JWT_SECRET to confirm it's set
+require('dotenv').config(); // Load environment variables from .env file
+console.log("Loaded JWT_SECRET:", process.env.JWT_SECRET); // Log the JWT secret to ensure it's loaded
 
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { createUser, getUserByEmail } = require('./models/User'); // Ensure these methods are correctly imported
-const authenticateToken = require('./models/authMiddlewares'); // Authentication middleware
+const authenticate = require('./models/authMiddlewares'); // Authentication middleware
+
 const app = express();
+const authRouter = require('./routes/authRoutes'); // Import the auth routes
 
 // CORS Middleware setup
 app.use(cors({
@@ -22,6 +22,9 @@ app.use(cors({
 
 // Parse JSON request bodies
 app.use(express.json());
+
+// Use routes
+app.use(authRouter);
 
 // Log the JWT_SECRET to ensure it's set correctly
 console.log('JWT_SECRET:', process.env.JWT_SECRET);
@@ -81,26 +84,12 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-
-app.get('/api/auth/profile', authenticateToken, async (req, res) => {
-  try {
-      const userId = req.user.id; // Get user ID from decoded token
-
-      // Query the database for user details
-      const result = await pool.query('SELECT id, name, balance FROM users WHERE id = $1', [userId]);
-
-      if (result.rows.length === 0) {
-          return res.status(404).json({ message: "User not found" });
-      }
-
-      // Return user details
-      res.json(result.rows[0]);
-  } catch (error) {
-      console.error("Error fetching user profile:", error);
-      res.status(500).json({ message: "Internal server error" });
-  }
+// Example protected route
+app.get('/api/auth/profile', authenticate, (req, res) => {
+  // If the middleware is successful, proceed with the route logic
+  const user = req.user; // Access user data from the middleware
+  res.json({ message: 'Profile data', user }); // Send user data back
 });
-
 
 // Start the server
 const port = process.env.PORT || 5000;

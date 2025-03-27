@@ -1,21 +1,28 @@
-// In authenticateToken.js (or your relevant file)
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+require('dotenv').config(); // Load environment variables from .env
 
-const authenticateToken = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Extract token
+const authenticate = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  console.log("🔍 Authorization Header:", authHeader);
 
-  if (!token) {
+  if (!authHeader) {
     return res.status(401).json({ message: 'Token not provided' });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  const token = authHeader.split(' ')[1]; // Extract the token from 'Bearer <token>'
+  console.log("🔍 Extracted Token:", token);
+
+  // Verify the token using the JWT secret stored in .env
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
+      console.log("❌ JWT Verification Error:", err);
       return res.status(403).json({ message: 'Invalid token' });
     }
-    req.user = user; // Attach user data to request
-    next();
+
+    console.log("✅ Token Verified. Decoded Data:", decoded);
+    req.user = decoded.user;  // Attach decoded user data to request object
+    next(); // Continue to the next middleware or route handler
   });
 };
 
-module.exports = authenticateToken;
+module.exports = authenticate; // Export the middleware for use in other files

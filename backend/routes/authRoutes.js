@@ -1,16 +1,16 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { createUser, getUserByEmail } = require('../models/User'); // Import functions
+const { createUser, getUserByEmail } = require('../models/User'); // Import functions from your User model
 const authenticate = require('../models/authMiddlewares'); // Authentication middleware
 
 // Load environment variables
-require('dotenv').config();  // Make sure to add .env file
+require('dotenv').config();
 
 const router = express.Router();
 
 // Route for user registration
-app.post('/api/auth/register', async (req, res) => {
+router.post('/api/auth/register', async (req, res) => {
   const { name, email, password } = req.body;
   console.log('Received registration request:', { name, email });
 
@@ -35,23 +35,22 @@ app.post('/api/auth/register', async (req, res) => {
 
     res.status(201).json({ token });
   } catch (error) {
-    console.error('Error during registration:', error);  // Log error stack to help trace the issue
+    console.error('Error during registration:', error); 
     res.status(500).json({ msg: 'Internal server error', error: error.message });
   }
 });
 
-
 // Route for user login
-router.post('/login', async (req, res) => {
+router.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
-  console.log('Received login request:', { email });  // Log request data
+  console.log('Received login request:', { email });
 
   try {
     // Get the user by email
     console.log('Fetching user by email...');
     const user = await getUserByEmail(email);
     if (!user) {
-      console.log('User not found:', email);  // Log if user is not found
+      console.log('User not found:', email);  
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
 
@@ -59,38 +58,42 @@ router.post('/login', async (req, res) => {
     console.log('Comparing passwords...');
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      console.log('Invalid password for user:', email);  // Log invalid password attempt
+      console.log('Invalid password for user:', email);  
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
 
     // Create JWT token
     console.log('Creating JWT token...');
-    const payload = { user: { id: user.id } };
-    const token = jwt.sign(payload, process.env.JWT_SECRET || 'your-secret-key', { expiresIn: '1h' });
-
+    const payload = { user: { id: user.id, name: user.name, email: user.email } }; // Add necessary fields
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+    
     res.json({ token });
   } catch (error) {
-    console.error('Error during login:', error.message);  // Log detailed error message
-    res.status(500).json({ msg: 'Internal server error', error: error.message });  // Return more detailed error information
+    console.error('Error during login:', error.message);  
+    res.status(500).json({ msg: 'Internal server error', error: error.message });
   }
 });
 
 // Route to get the user profile
-router.get('/profile', authenticate, async (req, res) => {
-  console.log('Fetching profile for user:', req.user.email);  // Log the user email from the token
-
+router.get('/api/auth/profile', authenticate, async (req, res) => {
   try {
-    // Fetch the user profile based on the email from the token
-    const user = await getUserByEmail(req.user.email);
+    console.log('🚀 User in request:', req.user);
+
+    if (!req.user || !req.user.id) {
+      console.error('🔴 No user found in request');
+      return res.status(401).json({ msg: 'Unauthorized - No user attached' });
+    }
+
+    // Fetch user from database
+    const user = await getUserByEmail(req.user.email);  // Assuming email is available in req.user
     if (!user) {
-      console.log('User not found in profile request:', req.user.email);  // Log if user is not found
       return res.status(404).json({ msg: 'User not found' });
     }
 
-    res.json({ id: user.id, name: user.name });
+    res.json({ id: user.id, name: user.name, email: user.email });
   } catch (error) {
-    console.error('Error fetching profile:', error.message);  // Log detailed error message
-    res.status(500).json({ msg: 'Internal server error', error: error.message });  // Return more detailed error information
+    console.error('❌ Server Error:', error);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
