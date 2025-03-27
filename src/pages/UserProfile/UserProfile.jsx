@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for redirect
 import { 
-  Box, Button, Typography, Divider, List, ListItem, ListItemText, Tabs, Tab, 
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, 
-  IconButton, Card, CardContent, Avatar,Grid
+  Box, Button, Typography, Divider, List, ListItem, ListItemText, IconButton, Card, CardContent, Avatar,Grid
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -16,7 +14,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import FooterMenu from './Footer';
+import FooterMenu from '../Footer';
 import './UserProfile.css'; // Import your CSS for styling
 
 const generateRandomEmail = () => {
@@ -87,6 +85,7 @@ const UserProfile = () => {
 
   return (
     <div className="profile-container">
+              <div className={`profile-content ${menuOpen ? 'expanded' : ''}`}>
       {/* Header with Burger Icon and Logout Button aligned to the right */}
       <div className="header">
         <div className="header-left">
@@ -101,6 +100,7 @@ const UserProfile = () => {
             Logout
           </button>
         </div>
+      </div>
       </div>
 
       {/* Side Menu */}
@@ -219,42 +219,6 @@ const UserProfile = () => {
   </CardContent>
 </Card>
 
-
-                  <Divider sx={{ my: 3 }} />
-
-                  {/* Transactions Tab */}
-                  <Box sx={{ width: "100%", mt: 3 }}>
-                    <Tabs value={selectedTab} onChange={(e, newValue) => setSelectedTab(newValue)} indicatorColor="primary" textColor="primary" centered>
-                      <Tab label="Recent Charges" />
-                      <Tab label="Recent Withdrawals" />
-                    </Tabs>
-
-                    <TableContainer component={Paper} sx={{ mt: 2 }}>
-                      <Table>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Email</TableCell>
-                            <TableCell>Amount (USDT)</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {selectedTab === 0
-                            ? transactions.charges.map((item, index) => (
-                                <TableRow key={index}>
-                                  <TableCell>{item.email}</TableCell>
-                                  <TableCell>{item.amount}</TableCell>
-                                </TableRow>
-                              ))
-                            : transactions.withdrawals.map((item, index) => (
-                                <TableRow key={index}>
-                                  <TableCell>{item.email}</TableCell>
-                                  <TableCell>{item.amount}</TableCell>
-                                </TableRow>
-                              ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Box>
                 </div>
               ) : (
                 <Typography variant="body1">Loading...</Typography>

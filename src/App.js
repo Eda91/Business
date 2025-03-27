@@ -4,7 +4,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import General from './pages/General/General';
-import UserProfile from './pages/UserProfile'; // Add the UserProfile page component
+import UserProfile from './pages/UserProfile/UserProfile'; // Add the UserProfile page component
 import { AuthProvider } from './context/AuthContext'; // Ensure the correct path
 
 

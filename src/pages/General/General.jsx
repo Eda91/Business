@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { 
   Box, Typography, Divider, Tabs, Tab, Table, TableBody, TableCell, 
   TableContainer, TableHead, TableRow, Paper, Card, CardContent, Button, 
-  Grid, IconButton, List, ListItem, ListItemText, Drawer 
+  Grid, IconButton, List, ListItem, ListItemText
 } from '@mui/material';
 
 import MenuIcon from '@mui/icons-material/Menu';
@@ -50,63 +50,65 @@ const General = () => {
   };
 
   return (
-      <div className="general-container">
-          {/* Header with Burger Icon and Logout Button aligned to the right */}
-          <div className="header">
-            <div className="header-left">
-              <IconButton onClick={toggleMenu}>
-                <MenuIcon />
-              </IconButton>
-            </div>
-            <div className="header-right">
-              {/* Logout Button */}
-              <button className="logout-btn" onClick={logout}>
-                <ExitToAppIcon />
-                Logout
-              </button>
-            </div>
-          </div>
-
-      {/* Side Menu */}
-      <Drawer anchor="left" open={menuOpen} onClose={toggleMenu}>
-        <List className="general-side-menu">
-          <ListItem button component={Link} to="/company-general">
-            <AccountCircleIcon className="general-menu-icon" />
-            <ListItemText primary="Company general" />
+    <div className="general-container" >
+            <div className={`general-content ${menuOpen ? 'expanded' : ''}`}>
+      {/* Header with Burger Icon and Logout Button aligned to the right */}
+      <div className="header">
+        <div className="header-left">
+          <IconButton onClick={toggleMenu}>
+            <MenuIcon />
+          </IconButton>
+        </div>
+        <div className="header-right">
+          {/* Logout Button */}
+          <button className="logout-btn" onClick={logout}>
+            <ExitToAppIcon />
+            Logout
+          </button>
+        </div>
+      </div>
+      </div>
+ {/* Side Menu */}
+      <div className={`side-menu ${menuOpen ? 'open' : ''}`}>
+        <List>
+          <ListItem button component={Link} to="/company-profile" className="menu-item">
+            <AccountCircleIcon className="menu-icon" />
+            <ListItemText primary="Company Profile" />
           </ListItem>
-          <ListItem button component={Link} to="/platform-rules">
-            <RuleIcon className="general-menu-icon" />
+          <ListItem button component={Link} to="/platform-rules" className="menu-item">
+            <RuleIcon className="menu-icon" />
             <ListItemText primary="Platform Rules" />
           </ListItem>
-          <ListItem button component={Link} to="/common-problems">
-            <HelpOutlineIcon className="general-menu-icon" />
+          <ListItem button component={Link} to="/common-problems" className="menu-item">
+            <HelpOutlineIcon className="menu-icon" />
             <ListItemText primary="Common Problems" />
           </ListItem>
-          <ListItem button component={Link} to="/security-center">
-            <SecurityIcon className="general-menu-icon" />
+          <ListItem button component={Link} to="/security-center" className="menu-item">
+            <SecurityIcon className="menu-icon" />
             <ListItemText primary="Security Center" />
           </ListItem>
-          <ListItem button component={Link} to="/funding-details">
-            <AccountBalanceWalletIcon className="general-menu-icon" />
+          <ListItem button component={Link} to="/funding-details" className="menu-item">
+            <AccountBalanceWalletIcon className="menu-icon" />
             <ListItemText primary="Funding Details" />
           </ListItem>
-          <ListItem button component={Link} to="/invite-friends">
-            <GroupAddIcon className="general-menu-icon" />
+          <ListItem button component={Link} to="/invite-friends" className="menu-item">
+            <GroupAddIcon className="menu-icon" />
             <ListItemText primary="Invite Friends" />
           </ListItem>
-          <ListItem button component={Link} to="/my-team">
-            <GroupIcon className="general-menu-icon" />
+          <ListItem button component={Link} to="/my-team" className="menu-item">
+            <GroupIcon className="menu-icon" />
             <ListItemText primary="My Team" />
           </ListItem>
-          <ListItem button component={Link} to="/quotation-tutorial">
-            <AssignmentIcon className="general-menu-icon" />
+          <ListItem button component={Link} to="/quotation-tutorial" className="menu-item">
+            <AssignmentIcon className="menu-icon" />
             <ListItemText primary="Quotation Tutorial" />
           </ListItem>
         </List>
-      </Drawer>
+      </div>
+
 
       {/* Content */}
-      <div className="general-content">
+      <div className={`general-content ${menuOpen ? 'expanded' : ''}`}>
         <Card className="general-card">
           <CardContent>
             <Typography variant="h4" align="center" sx={{ mb: 3 }}>
