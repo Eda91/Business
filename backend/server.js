@@ -91,6 +91,56 @@ app.get('/api/auth/profile', authenticate, (req, res) => {
   res.json({ message: 'Profile data', user }); // Send user data back
 });
 
+
+// Backend API to handle recharge request
+app.post('/api/recharge', async (req, res) => {
+  const { userId, amount } = req.body;
+
+  if (!userId || !amount) {
+    return res.status(400).json({ message: 'User ID and amount are required' });
+  }
+
+  try {
+    // Insert the recharge request into the database
+    const result = await db.query(
+      `INSERT INTO recharge_requests (user_id, amount) VALUES ($1, $2) RETURNING *`,
+      [userId, amount]
+    );
+
+    res.status(201).json({ message: 'Recharge request created successfully', request: result.rows[0] });
+  } catch (error) {
+    console.error('Error creating recharge request:', error);
+    res.status(500).json({ message: 'Error creating recharge request' });
+  }
+});
+
+// Backend API to handle withdraw request
+app.post('/api/withdraw', async (req, res) => {
+  const { userId, amount } = req.body;
+
+  if (!userId || !amount) {
+    return res.status(400).json({ message: 'User ID and amount are required' });
+  }
+
+  try {
+    // Calculate handling fee (for example, 3% fee)
+    const handlingFee = (amount * 0.03).toFixed(2);
+    const actualAmount = (amount - handlingFee).toFixed(2);
+
+    // Insert the withdraw request into the database
+    const result = await db.query(
+      `INSERT INTO withdraw_requests (user_id, amount, handling_fee, actual_amount) 
+       VALUES ($1, $2, $3, $4) RETURNING *`,
+      [userId, amount, handlingFee, actualAmount]
+    );
+
+    res.status(201).json({ message: 'Withdraw request created successfully', request: result.rows[0] });
+  } catch (error) {
+    console.error('Error creating withdraw request:', error);
+    res.status(500).json({ message: 'Error creating withdraw request' });
+  }
+});
+
 // Start the server
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
